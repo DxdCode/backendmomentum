@@ -1,49 +1,33 @@
-Usuario {
-  id: string,
-  nombre: string,
-  email: string,
-  contraseña: string, 
-  avatar: string (opcional),
-  historial: [ { fecha: Date, accion: string } ], 
-  fecha_creacion: Date,
-  fecha_actualizacion: Date
-}
+# BMomentum
 
+BMomentum is a project designed to help users manage and track their goals and progress efficiently.
 
-Hábito {
-  id: string,
-  usuarioId: string,
-  nombre: string,
-  categoria: string, // salud, productividad, bienestar...
-  frecuencia: string, // diaria, semanal, mensual
-  prioridad: string (opcional),
-  
-  recordatorio: string (hora opcional),
-  fecha_creacion: Date,
-  fecha_actualizacion: Date
-}
+## Features
 
- 
-Progreso {
-  id: string,
-  habitId: string,
-  usuarioId: string,
-  fecha: Date,
-  completado: boolean
-}
+- Goal tracking and management
+- Progress visualization
+- User-friendly interface
 
+## Getting Started
 
-Gamificacion {
-  usuarioId: string,
-  puntos: number,
-  badges: [string], // lista de badges
-  nivel: number (fase 2)
-}
+1. Clone the repository:
+  ```bash
+  git clone https://github.com/yourusername/BMomentum.git
+  ```
+2. Install dependencies:
+  ```bash
+  cd BMomentum
+  npm install
+  ```
+3. Start the application:
+  ```bash
+  npm start
+  ```
 
+## Contributing
 
-Notificacion {
-  usuarioId: string,
-  mensaje: string,
-  fecha_envio: Date,
-  leida: boolean
-}
+Contributions are welcome! Please open issues or submit pull requests for improvements.
+
+## License
+
+This project is licensed under the MIT License.
