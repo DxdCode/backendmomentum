@@ -1,19 +1,21 @@
-import app from "./app.js";
-import sequelize from "./database.js";
+import './env.js'; 
+import app from './app.js';
+import sequelize from './database.js';
 
-async function startServer() {
+const PORT = process.env.PORT || 3000;
+
+(async () => {
   try {
     await sequelize.authenticate();
-    console.log("Conexión a Postgres.");
+    console.log('✅ Conectado a PostgreSQL correctamente');
+
     await sequelize.sync({ alter: true });
+    console.log('✅ Tablas sincronizadas');
 
-    app.listen(app.get("port"), () => {
-      console.log(`Servidor activo en http://localhost:${app.get("port")}`);
+    app.listen(PORT, () => {
+      console.log(`Servidor corriendo en puerto ${PORT}`);
     });
-  } catch (error) {
-    console.error("Error al conectarse con la base de datos:", error);
-    process.exit(1);
+  } catch (err) {
+    console.error('❌ Error al iniciar el servidor:', err);
   }
-}
-
-startServer();
+})();
