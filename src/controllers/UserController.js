@@ -15,9 +15,9 @@ class UserController {
             const { email, password } = req.body;
             const { user, token } = await UserService.login(email, password);
 
-            res.cookie("jwt", token, {
+            res.cookie("session", token, {
                 httpOnly: true,    
-                secure: process.env.NODE_ENV === "production",
+                secure: true,
                 sameSite: "strict", 
                 maxAge: 24 * 60 * 60 * 1000 
             });

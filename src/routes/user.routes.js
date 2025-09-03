@@ -3,8 +3,7 @@ import UserController from "../controllers/UserController.js";
 import { protect } from "../middlewares/auth.middleware.js";
 
 const router = Router();
-
-router.get("/profile", protect, (req, res) => UserController.getProfile(req, res));
-router.put("/profile", protect, (req, res) => UserController.updateProfile(req, res));
+router.get("/profile", protect, UserController.getProfile);
+router.put("/profile", protect, UserController.updateProfile);
 
 export default router;
