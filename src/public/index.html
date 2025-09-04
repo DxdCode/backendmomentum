@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+  <h1>HabitFlow 🚀</h1>
+
+  <!-- Registro -->
+  <h2>Registro</h2>
+  <form id="registerForm">
+    <input type="text" id="regName" placeholder="Nombre" required />
+    <input type="email" id="regEmail" placeholder="Email" required />
+    <input type="password" id="regPassword" placehold   er="Contraseña" required />
+    <button type="submit">Registrarse</button>
+  </form>
+
+  <!-- Login -->
+  <h2>Login</h2>
+  <form id="loginForm">
+    <input type="email" id="loginEmail" placeholder="Email" required />
+    <input type="password" id="loginPassword" placeholder="Contraseña" required />
+    <button type="submit">Login</button>
+  </form>
+
+  <!-- Login con Google -->
+  <h2>Login con Google</h2>
+  <a href="http://localhost:3000/api/users/google">
+    <button>Login con Google</button>
+  </a>
+
+  <script>
+    const API = "http://localhost:3000/api/users";
+
+    // Registro
+    document.getElementById("registerForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = document.getElementById("regName").value;
+      const email = document.getElementById("regEmail").value;
+      const password = document.getElementById("regPassword").value;
+
+      const res = await fetch(`${API}/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
+        credentials: "include"
+      });
+
+      const data = await res.json();
+      alert("Registro: " + JSON.stringify(data));
+    });
+
+    // Login
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("loginEmail").value;
+      const password = document.getElementById("loginPassword").value;
+
+      const res = await fetch(`${API}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+        credentials: "include"
+      });
+
+      const data = await res.json();
+      alert("Login: " + JSON.stringify(data));
+    });
+  </script>
+</body>
+</html>
