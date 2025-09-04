@@ -12,5 +12,9 @@ export const createUser = async ({ name, email, password, avatar }) => {
 
 // Buscar usuario por ID
 export const findUserById = async (id) => {
-  return await User.findByPk(id, { attributes: ["id","name","email","avatar","history"] });
+  return await User.findByPk(id, { attributes: ["id","name","email","avatar"] });
 };
+
+export const updateUser = async (user) =>{
+  return await user.save()
+}

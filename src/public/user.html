@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HabitFlow 🚀 - Perfil</title>
+</head>
+<body>
+  <h1>Actualizar Perfil</h1>
+
+  <form id="profileForm">
+    <input type="text" id="profileName" placeholder="Nuevo nombre" />
+    <input type="email" id="profileEmail" placeholder="Nuevo email" />
+    <input type="file" id="profileAvatar" accept="image/*" />
+    <button type="submit">Actualizar</button>
+  </form>
+
+  <script>
+    const API = "http://localhost:3000/api/users";
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjcsImlhdCI6MTc1Njk1MDUyNywiZXhwIjoxNzU3MDM2OTI3fQ.3eRHv7sHqrivApWPYaNuSUFWv2tCu3T_uy1hWJ9Mn_g"; // Sustituye con JWT real o cookie
+
+    document.getElementById("profileForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData();
+      const name = document.getElementById("profileName").value;
+      const email = document.getElementById("profileEmail").value;
+      const file = document.getElementById("profileAvatar").files[0];
+
+      if (name) formData.append("name", name);
+      if (email) formData.append("email", email);
+      if (file) formData.append("avatar", file);
+
+      const res = await fetch(`${API}/profile/update`, {
+        method: "PUT",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData
+      });
+      alert(JSON.stringify(await res.json()));
+    });
+  </script>
+</body>
+</html>

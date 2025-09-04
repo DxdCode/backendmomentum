@@ -1,4 +1,11 @@
-import { registerUserService, loginUserService, getProfileService } from "../services/userService.js";
+import { 
+  registerUserService, 
+  loginUserService, 
+  getProfileService, 
+  resetPassword, 
+  requestPasswordReset, 
+  updateProfileService
+} from "../services/userService.js";
 
 // Registro
 export const registerUser = async (req, res) => {
@@ -12,13 +19,13 @@ export const registerUser = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000
     });
 
-    res.status(201).json({ user });
+    res.status(201).json({ user, token });
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({ msg: err.message });
   }
 };
 
-// Login
+// Iniciar sesión
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -30,9 +37,31 @@ export const loginUser = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000
     });
 
-    res.json({ user });
+    res.status(200).json({ user, token });
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(400).json({ msg: err.message });
+  }
+};
+
+// Solicitar enlace de recuperacion
+export const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const data = await requestPasswordReset(email);
+    res.status(200).json({ msg: data.message });
+  } catch (err) {
+    res.status(400).json({ msg: err.message });
+  }
+};
+
+// Resetear la contraseña
+export const resetPasswordController = async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+    const data = await resetPassword(token, newPassword);
+    res.status(200).json({ msg: data.message });
+  } catch (err) {
+    res.status(400).json({ msg: err.message });
   }
 };
 
@@ -40,14 +69,32 @@ export const loginUser = async (req, res) => {
 export const getProfile = async (req, res) => {
   try {
     const user = await getProfileService(req.userId);
-    res.json(user);
+    res.status(200).json({ user });
   } catch (err) {
-    res.status(404).json({ message: err.message });
+    res.status(404).json({ msg: err.message });
   }
 };
 
-// Logout
+export const updateProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const avatarUrl = req.file ? req.file.path : undefined;
+
+    const updatedUser = await updateProfileService(userId, {
+      name: req.body.name,
+      email: req.body.email,
+      avatar: avatarUrl
+    });
+
+    res.status(200).json({ msg: "User update successfully", user: updatedUser });
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+    console.log(err)
+  }
+};
+
+// Salir
 export const logoutUser = (req, res) => {
   res.clearCookie("token", { httpOnly: true });
-  res.json({ message: "Logged out" });
+  res.status(200).json({ msg: "Logged out" });
 };

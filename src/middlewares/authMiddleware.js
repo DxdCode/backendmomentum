@@ -6,7 +6,7 @@ export const authMiddleware = (req, res, next) => {
 
   try {
     const decoded = verifyToken(token);
-    req.userId = decoded.userId;
+    req.user = { id: decoded.userId };
     next();
   } catch (err) {
     res.status(401).json({ message: "Invalid token" });

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HabitFlow 🚀</title>
 </head>
 <body>
   <h1>HabitFlow 🚀</h1>
@@ -13,7 +13,7 @@
   <form id="registerForm">
     <input type="text" id="regName" placeholder="Nombre" required />
     <input type="email" id="regEmail" placeholder="Email" required />
-    <input type="password" id="regPassword" placehold   er="Contraseña" required />
+    <input type="password" id="regPassword" placeholder="Contraseña" required />
     <button type="submit">Registrarse</button>
   </form>
 
@@ -30,6 +30,21 @@
   <a href="http://localhost:3000/api/users/google">
     <button>Login con Google</button>
   </a>
+
+  <!-- Forgot Password -->
+  <h2>Olvidé mi contraseña</h2>
+  <form id="forgotForm">
+    <input type="email" id="forgotEmail" placeholder="Email" required />
+    <button type="submit">Enviar link de recuperación</button>
+  </form>
+
+  <!-- Reset Password -->
+  <h2>Restablecer Contraseña</h2>
+  <form id="resetForm">
+    <input type="text" id="resetToken" placeholder="Token del email" required />
+    <input type="password" id="resetPassword" placeholder="Nueva contraseña" required />
+    <button type="submit">Restablecer</button>
+  </form>
 
   <script>
     const API = "http://localhost:3000/api/users";
@@ -67,6 +82,39 @@
 
       const data = await res.json();
       alert("Login: " + JSON.stringify(data));
+    });
+
+    // Forgot Password
+    document.getElementById("forgotForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("forgotEmail").value;
+
+      const res = await fetch(`${API}/forgot-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+        credentials: "include"
+      });
+
+      const data = await res.json();
+      alert("Forgot Password: " + JSON.stringify(data));
+    });
+
+    // Reset Password
+    document.getElementById("resetForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const token = document.getElementById("resetToken").value;
+      const newPassword = document.getElementById("resetPassword").value;
+
+      const res = await fetch(`${API}/reset-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token, newPassword }),
+        credentials: "include"
+      });
+
+      const data = await res.json();
+      alert("Reset Password: " + JSON.stringify(data));
     });
   </script>
 </body>
