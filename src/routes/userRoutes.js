@@ -1,11 +1,11 @@
-import express from "express";
+import {Router} from "express";
 import { registerUser, loginUser, getProfile, logoutUser, forgotPassword, resetPasswordController, updateProfile } from "../controllers/userController.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 import passport from "passport";
 import { generateToken } from "../utils/auth.js";
 import parser from "../middlewares/upload.js";
 
-const router = express.Router();
+const router = Router();
 
 // Rutas de autenticación
 router.post("/register", registerUser);

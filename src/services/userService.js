@@ -73,9 +73,10 @@ export const getProfileService = async (userId) => {
   return user;
 };
 
+// Actualizar perfil
 export const updateProfileService = async (userId, { name, email, avatar }) => {
   const user = await findUserById(userId);  
-  if (!user) throw new Error("Usuario no encontrado");
+  if (!user) throw new Error("User not found");
 
   if (email) {  
     const existingUser = await User.findOne({ where: { email } });

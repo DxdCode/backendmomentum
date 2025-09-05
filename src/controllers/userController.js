@@ -68,7 +68,7 @@ export const resetPasswordController = async (req, res) => {
 // Perfil
 export const getProfile = async (req, res) => {
   try {
-    const user = await getProfileService(req.userId);
+    const user = await getProfileService(req.user.id);
     res.status(200).json({ user });
   } catch (err) {
     res.status(404).json({ msg: err.message });

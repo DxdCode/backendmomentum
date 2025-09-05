@@ -8,6 +8,7 @@ const User = sequelize.define("Users", {
   password: { type: DataTypes.STRING(100), allowNull: false },
   avatar: { type: DataTypes.STRING(250), allowNull: true },
   history: { type: DataTypes.ARRAY(DataTypes.JSONB), defaultValue: [] },
+  active:{type:DataTypes.BOOLEAN, allowNull:true, defaultValue: true},
   resetPasswordToken: { type: DataTypes.STRING, allowNull: true },
   resetPasswordExpires: { type: DataTypes.DATE, allowNull: true },
 

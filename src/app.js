@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import passport from "./config/passport.js";
 import userRoutes from "./routes/userRoutes.js";
+import habitRoutes from "./routes/habitRoutes.js";
 
 dotenv.config();
 
@@ -37,6 +38,8 @@ app.get('/', (req, res) => {
 });
 
 app.use("/api/users", userRoutes);
+app.use("/api/habits", habitRoutes);
+
 
 app.use((req, res, next) => {
   res.status(404).json({ msg: "Not Found" });

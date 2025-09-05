@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import sequelize from '../database.js';
+import sequelize from "../config/database.js";
 import User from './User.js';
 
 const Habit = sequelize.define('Habit', {
@@ -24,7 +24,7 @@ const Habit = sequelize.define('Habit', {
         validate: { len: [2, 30] }
     },
     frequency: {
-        type: DataTypes.ENUM('Daily', 'Weekly', 'Monthly'),
+        type: DataTypes.ENUM('diaria', 'semanal', 'mensual'),
         allowNull: false
     },
     priority: {
@@ -32,10 +32,10 @@ const Habit = sequelize.define('Habit', {
         allowNull: true
     },
     reminder: {
-        type: DataTypes.STRING(100),
-        allowNull: true,
-        validate: { len: [2, 100] }
+        type: DataTypes.TIME,
+        allowNull: true
     }
+
 }, {
     tableName: 'habits',
     timestamps: true
