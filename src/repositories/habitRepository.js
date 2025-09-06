@@ -23,6 +23,7 @@ export const deleteHabit = async (id) => {
     return await Habit.destroy({ where: { id } });
 }
 
+// Actualizar hábito 
 export const updateHabit = async (habit) => {
     return await habit.save()
 }

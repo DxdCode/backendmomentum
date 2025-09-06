@@ -7,6 +7,10 @@ import User from "../models/User.js";
 
 // Registro
 export const registerUserService = async ({ name, email, password, avatar }) => {
+
+  if (!name || !email || !password ) {
+    throw new Error("Required data is missing or empty");
+  }
   const existingUser = await findUserByEmail(email);
   if (existingUser) throw new Error("Email already registered");
 

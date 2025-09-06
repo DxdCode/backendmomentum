@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import sequelize from '../database.js';
+import sequelize from '../config/database.js';
 import Habit from './Habit.js';
 import User from './User.js';
 
@@ -20,16 +20,31 @@ const Progress = sequelize.define('Progress', {
         allowNull: false
     },
     date: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: false
     },
-    completed: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false
+    status: {
+        type: DataTypes.ENUM(
+            'no_iniciado',
+            'pendiente',
+            'en_progreso',
+            'con_dificultades',
+            'completado',
+            'omitido'
+        ),
+        allowNull: false,
+        defaultValue: 'no_iniciado'
     }
+}, {
+    tableName: 'progress',
+    timestamps: true,
 });
 
-Progress.belongsTo(Habit, { foreignKey: 'habitId' });
+// Relaciones
+User.hasMany(Progress, { foreignKey: 'userId' });
 Progress.belongsTo(User, { foreignKey: 'userId' });
+
+Habit.hasMany(Progress, { foreignKey: 'habitId' });
+Progress.belongsTo(Habit, { foreignKey: 'habitId' });
 
 export default Progress;

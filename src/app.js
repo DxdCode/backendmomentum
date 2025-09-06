@@ -5,6 +5,8 @@ import cookieParser from "cookie-parser";
 import passport from "./config/passport.js";
 import userRoutes from "./routes/userRoutes.js";
 import habitRoutes from "./routes/habitRoutes.js";
+import progressRouter from "./routes/progressRoutes.js";
+import notificationRouter from "./routes/notificationRoutes.js";
 
 dotenv.config();
 
@@ -16,7 +18,7 @@ const allowedOrigins = [
 
 // CORS con credenciales (cookies)
 app.use(cors({
-  origin: function(origin, callback) {
+  origin: function (origin, callback) {
     if (!origin) return callback(null, true);
     if (allowedOrigins.includes(origin)) {
       callback(null, true);
@@ -24,7 +26,7 @@ app.use(cors({
       callback(new Error("No permitido por CORS"));
     }
   },
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   credentials: true
 }));
 
@@ -39,6 +41,8 @@ app.get('/', (req, res) => {
 
 app.use("/api/users", userRoutes);
 app.use("/api/habits", habitRoutes);
+app.use("/api/progress", progressRouter)
+app.use("/api/notification", notificationRouter)
 
 
 app.use((req, res, next) => {

@@ -1,9 +1,20 @@
 import { Op } from "sequelize";
 import { createHabit, deleteHabit, findHabitById, findHabitsByUser, updateHabit } from "../repositories/habitRepository.js"
+import { findUserById } from "../repositories/userRepository.js";
 
 // Crear hábito
 export const registerHabitService = async ({ userId, name, category, frequency, priority, reminder }) => {
+
+    if (!name || !category || !frequency || !priority || !reminder) {
+        throw new Error("Required data is missing or empty");
+    }
+
     const validFrequencies = ['diaria', 'semanal', 'mensual'];
+
+    const user = await findUserById(userId)
+    if (!user) {
+        throw new Error("Not found User ID");
+    }
     if (!validFrequencies.includes(frequency.toLowerCase())) {
         throw new Error(`Frecuencia inválida. Los valores permitidos son: ${validFrequencies.join(', ')}`);
     }
@@ -64,5 +75,5 @@ export const deleteHabitService = async (id) => {
     const habitId = await findHabitById(id)
     if (!habitId) throw new Error("Invalid ID habit")
     await deleteHabit(id)
-    return { message: "Delete habit successfully" }
+    return { msg: "Delete habit successfully" }
 }

@@ -25,10 +25,11 @@ const Habit = sequelize.define('Habit', {
     },
     frequency: {
         type: DataTypes.ENUM('diaria', 'semanal', 'mensual'),
-        allowNull: false
+        allowNull: false,
+        defaultValue: "diaria"
     },
     priority: {
-        type: DataTypes.STRING(20),
+        type: DataTypes.ENUM('baja', 'media', 'alta'),
         allowNull: true
     },
     reminder: {
