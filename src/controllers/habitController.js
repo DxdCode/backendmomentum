@@ -1,4 +1,4 @@
-import { deleteHabitService, getHabitIdService, getHabitsService, registerHabitService, updateHabitService } from "../services/habitService.js"
+import { completeHabitService, createHabitChallengeService, deleteHabitService, getHabitChallengeService, getHabitIdService, getHabitsService, registerHabitService, updateHabitService } from "../services/habitService.js"
 
 
 // Crear hábito
@@ -39,6 +39,8 @@ export const deleteHabit = async (req, res) => {
 
 }
 
+//Obtener hábitos
+
 export const getHabits = async (req, res) => {
     try {
         const userId = req.user.id;
@@ -53,6 +55,8 @@ export const getHabits = async (req, res) => {
     }
 };
 
+//Obtener un hábito
+
 export const getHabitId = async (req, res) => {
     try {
         const { id } = req.params
@@ -62,3 +66,44 @@ export const getHabitId = async (req, res) => {
         res.status(500).json({ msg: error.message })
     }
 }
+
+//Completar un hábito
+
+export const completeHabit = async (req, res) => {
+    try {
+        const { habitId } = req.params;
+        const { status } = req.body;
+        const userId = req.user.id;
+
+        const progress = await completeHabitService(userId, habitId, status);
+        res.status(200).json("Completed habit",progress);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
+
+
+//  Crear reto de hábito 
+export const createHabitChallenge = async (req, res) => {
+    try {
+        const { habitId } = req.params;
+        const { challengeDays } = req.body;
+
+        const habit = await createHabitChallengeService(habitId, challengeDays);
+        res.status(200).json({ msg: "Reto creado correctamente", habit });
+    } catch (error) {
+        res.status(400).json({ msg: error.message });
+    }
+};
+
+//  Obtener reto de hábito 
+export const getHabitChallenge = async (req, res) => {
+    try {
+        const { habitId } = req.params;
+
+        const challenge = await getHabitChallengeService(habitId);
+        res.status(200).json({ msg: "Reto del hábito", challenge });
+    } catch (error) {
+        res.status(400).json({ msg: error.message });
+    }
+};

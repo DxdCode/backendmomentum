@@ -1,8 +1,8 @@
 import Habit from "../models/Habit.js"
 
 // Crear nuevo hábito
-export const createHabit = async ({ userId, name, category, frequency, priority, reminder }) => {
-    return await Habit.create({ userId, name, category, frequency, priority, reminder })
+export const createHabit = async (data) => {
+    return await Habit.create(data)
 }
 
 // Buscar hábito por id

@@ -1,6 +1,9 @@
 import { Op } from "sequelize";
 import { createHabit, deleteHabit, findHabitById, findHabitsByUser, updateHabit } from "../repositories/habitRepository.js"
 import { findUserById } from "../repositories/userRepository.js";
+import POINTS_BY_STATUS from "./constants/pointsByStatus.js";
+import { createProgress } from "../repositories/progressRepository.js";
+import { findGamificationByUserId } from "../repositories/gamificationRepository.js";
 
 // Crear hábito
 export const registerHabitService = async ({ userId, name, category, frequency, priority, reminder }) => {
@@ -45,6 +48,7 @@ export const getHabitsService = async (userId, filters = {}) => {
     return habits
 };
 
+// Obtener un hábitos 
 export const getHabitIdService = async (habitId) => {
     const habits = await findHabitById(habitId)
     if (!habits) throw new Error("Invalid ID habit");
@@ -77,3 +81,56 @@ export const deleteHabitService = async (id) => {
     await deleteHabit(id)
     return { msg: "Delete habit successfully" }
 }
+
+// Completar un hábito
+
+export const completeHabitService = async (userId, habitId, status) => {
+    const habit = await HabitRepo.getHabitById(habitId);
+    if (!habit) throw new Error("Habit not found");
+
+    const pointsEarned = POINTS_BY_STATUS[status]
+    const progress = await createProgress({habitId,userId,date: new Date(),status,pointsEarned});
+
+    const gamification = await findGamificationByUserId(userId);
+    if (gamification) {
+        gamification.points += pointsEarned;
+
+        // Calcular streak
+        if (status === "completado") {
+            gamification.streak += 1;
+            if (gamification.streak > gamification.bestStreak) {
+                gamification.bestStreak = gamification.streak;
+            }
+        } else if (status === "omitido") {
+            gamification.streak = 0;
+        }
+
+        await gamification.save();
+    }
+
+    return progress;
+};
+
+// Crear un reto del hábito
+
+export const createHabitChallengeService = async (habitId, challengeDays) => {
+    const habit = await findHabitById(habitId);
+    if (!habit) throw new Error("Hábito no encontrado");
+
+    habit.challengeDays = challengeDays;
+    habit.challengeStartDate = new Date();
+
+    await HabitRepo.updateHabit(habit);
+    return habit;
+};
+
+
+// Obtener un reto del hábito
+export const getHabitChallengeService = async (habitId) => {
+    const habit = await findHabitById(habitId);
+    if (!habit) throw new Error("Habit not found");
+    return {
+        challengeDays: habit.challengeDays,
+        challengeStartDate: habit.challengeStartDate
+    };
+};
