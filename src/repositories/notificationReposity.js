@@ -1,8 +1,8 @@
 import Notification from "../models/Notification.js";
 
 // Crear notificación
-export const createNotification = async ({ userId, habitId, type, message, scheduledAt }) => {
-    return await Notification.create({ userId, habitId, type, message, scheduledAt });
+export const createNotification = async (data) => {
+    return await Notification.create(data);
 }
 
 // Listar notificaciones  de un usuario

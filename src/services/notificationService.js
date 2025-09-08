@@ -1,5 +1,6 @@
 import { createNotification, findNotificationsByUser, findNotificationById, markNotificationAsRead, deleteNotification } from "../repositories/notificationReposity.js";
 
+// Crear notificación
 export const createNotificationService = async ({ userId, habitId, type, message, scheduledAt }) => {
 
     if (!habitId || !type || !message || !scheduledAt) {
@@ -12,16 +13,20 @@ export const createNotificationService = async ({ userId, habitId, type, message
     return await createNotification({ userId, habitId, type, message, scheduledAt });
 }
 
+// Listar notificaciones de un usuario
 export const getNotificationsByUserService = async ({ id }) => {
     return await findNotificationsByUser(id);
 }
 
+// Marcar notificación como leída
 export const markNotificationReadService = async (id) => {
     const notification = await findNotificationById(id);
     if (!notification) throw new Error("Notification not found");
     return await markNotificationAsRead(notification);
 }
 
+
+// Eliminar notificación
 export const deleteNotificationService = async ({ id }) => {
     const notification = await findNotificationById(id);
     if (!notification) throw new Error("Notification not found");

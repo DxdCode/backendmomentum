@@ -1,13 +1,13 @@
 import User from "../models/User.js";
 
+// Crear nuevo usuario
+export const createUser = async (data) => {
+  return await User.create(data);
+};
+
 // Buscar usuario por email
 export const findUserByEmail = async (email) => {
   return await User.findOne({ where: { email } });
-};
-
-// Crear nuevo usuario
-export const createUser = async ({ name, email, password, avatar }) => {
-  return await User.create({ name, email, password, avatar });
 };
 
 // Buscar usuario por ID
