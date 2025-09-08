@@ -2,8 +2,8 @@ import Progress from "../models/Progress.js"
 
 
 // Crear nuevo progreso
-export const createProgress = async ({habitId,userId,date,status}) =>{
-    return await Progress.create({habitId,userId,date,status})
+export const createProgress = async (data) =>{
+    return await Progress.create(data)
 }
 
 // Buscar nuevo progreso por id
