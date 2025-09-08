@@ -7,6 +7,7 @@ import userRoutes from "./routes/userRoutes.js";
 import habitRoutes from "./routes/habitRoutes.js";
 import progressRouter from "./routes/progressRoutes.js";
 import notificationRouter from "./routes/notificationRoutes.js";
+import gamificationRouter from "./routes/gamificationRoutes.js";
 
 dotenv.config();
 
@@ -16,7 +17,7 @@ const allowedOrigins = [
   "http://localhost:3000"
 ];
 
-// CORS con credenciales (cookies)
+
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin) return callback(null, true);
@@ -43,7 +44,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/habits", habitRoutes);
 app.use("/api/progress", progressRouter)
 app.use("/api/notification", notificationRouter)
-
+app.use("api/gamification",gamificationRouter)
 
 app.use((req, res, next) => {
   res.status(404).json({ msg: "Not Found" });
