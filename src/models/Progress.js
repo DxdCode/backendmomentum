@@ -1,50 +1,43 @@
-import { DataTypes } from 'sequelize';
-import sequelize from '../config/database.js';
-import Habit from './Habit.js';
-import User from './User.js';
-
-const Progress = sequelize.define('Progress', {
+// src/models/Progress.js
+export default (sequelize, DataTypes) => {
+  const Progress = sequelize.define('Progress', {
     id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true
     },
     habitId: {
-        type: DataTypes.INTEGER,
-        references: { model: Habit, key: 'id' },
-        allowNull: false
+      type: DataTypes.INTEGER,
+      allowNull: false
     },
     userId: {
-        type: DataTypes.INTEGER,
-        references: { model: User, key: 'id' },
-        allowNull: false
+      type: DataTypes.INTEGER,
+      allowNull: false
     },
     date: {
-        type: DataTypes.DATEONLY,
-        allowNull: false
+      type: DataTypes.DATEONLY,
+      allowNull: false
     },
     status: {
-        type: DataTypes.ENUM(
-            'no_iniciado',
-            'pendiente',
-            'en_progreso',
-            'con_dificultades',
-            'completado',
-            'omitido'
-        ),
-        allowNull: false,
-        defaultValue: 'no_iniciado'
+      type: DataTypes.ENUM(
+        'no_iniciado',
+        'pendiente',
+        'en_progreso',
+        'con_dificultades',
+        'completado',
+        'omitido'
+      ),
+      allowNull: false,
+      defaultValue: 'no_iniciado'
+    },
+    pointsEarned: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
     }
-}, {
+  }, {
     tableName: 'progress',
-    timestamps: true,
-});
+    timestamps: true
+  });
 
-// Relaciones
-User.hasMany(Progress, { foreignKey: 'userId' });
-Progress.belongsTo(User, { foreignKey: 'userId' });
-
-Habit.hasMany(Progress, { foreignKey: 'habitId' });
-Progress.belongsTo(Habit, { foreignKey: 'habitId' });
-
-export default Progress;
+  return Progress;
+};
