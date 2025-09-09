@@ -1,4 +1,4 @@
-import Habit from "../models/Habit.js"
+import {Habit} from "../models/index.js";
 
 // Crear nuevo hábito
 export const createHabit = async (data) => {
@@ -14,7 +14,7 @@ export const findHabitById = async (id) => {
 // Buscar hábito por una opción
 export const findHabitsByUser = async (userId, filters = {}) => {
   return await Habit.findAll({
-    where: { userId, ...filters },
+    where: { userId, ...filters },order: [["createdAt", "DESC"]]
   });
 };
 

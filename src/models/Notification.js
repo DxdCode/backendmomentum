@@ -1,4 +1,3 @@
-// src/models/Notification.js
 export default (sequelize, DataTypes) => {
   const Notification = sequelize.define('Notification', {
     id: {

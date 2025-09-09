@@ -1,4 +1,4 @@
-import { completeHabitService, createHabitChallengeService, deleteHabitService, getHabitChallengeService, getHabitIdService, getHabitsService, registerHabitService, updateHabitService } from "../services/habitService.js"
+import {createHabitChallengeService, deleteHabitService, getHabitChallengeService, getHabitIdService, getHabitsService, registerHabitService, updateHabitService } from "../services/habitService.js"
 
 
 // Crear hábito
@@ -10,7 +10,6 @@ export const createHabit = async (req, res) => {
         res.status(201).json({ msg: "Create habit", habit: habitcreate })
     } catch (error) {
         res.status(400).json({ msg: error.message })
-        console.log(error)
     }
 }
 
@@ -67,21 +66,6 @@ export const getHabitId = async (req, res) => {
     }
 }
 
-//Completar un hábito
-
-export const completeHabit = async (req, res) => {
-    try {
-        const { habitId } = req.params;
-        const { status } = req.body;
-        const userId = req.user.id;
-
-        const progress = await completeHabitService(userId, habitId, status);
-        res.status(200).json("Completed habit",progress);
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
-};
-
 
 //  Crear reto de hábito 
 export const createHabitChallenge = async (req, res) => {
@@ -90,7 +74,7 @@ export const createHabitChallenge = async (req, res) => {
         const { challengeDays } = req.body;
 
         const habit = await createHabitChallengeService(habitId, challengeDays);
-        res.status(200).json({ msg: "Reto creado correctamente", habit });
+        res.status(200).json({ msg: "Habit Challenge successfully", habit });
     } catch (error) {
         res.status(400).json({ msg: error.message });
     }
@@ -102,7 +86,7 @@ export const getHabitChallenge = async (req, res) => {
         const { habitId } = req.params;
 
         const challenge = await getHabitChallengeService(habitId);
-        res.status(200).json({ msg: "Reto del hábito", challenge });
+        res.status(200).json({ msg: "Habit Challenge", challenge });
     } catch (error) {
         res.status(400).json({ msg: error.message });
     }
