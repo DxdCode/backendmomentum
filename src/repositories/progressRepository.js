@@ -1,4 +1,4 @@
-import Progress from "../models/Progress.js"
+import {Progress} from "../models/index.js";
 
 
 // Crear nuevo progreso
@@ -18,7 +18,7 @@ export const findAllProgressById = async(userId) =>{
 
 // Buscar historial de progreso por hábito
 export const findProgressByHabit = async(habitId) =>{
-    return await Progress.findAll({ where: { habitId } });
+    return await Progress.findOne({ where: { habitId },order:[["date", "DESC"]]});
 }
 
 // Eliminar progreso

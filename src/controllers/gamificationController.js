@@ -1,34 +1,39 @@
-import { getUserGamificationService, getAchievementsService, unlockAchievementService } from "../services/gamificationService.js";
+import { 
+  getUserGamificationService, 
+  getLeaderboardService, 
+  updateGamificationPointsAndStreak 
+} from "../services/gamificationService.js";
 
-// Ver estado de gamificación
+// Obtener gamificación de usuario
 export const getUserGamification = async (req, res) => {
     try {
-        const { userId } = req.params;
+        const userId = req.user.id; 
         const gamification = await getUserGamificationService(userId);
         res.status(200).json(gamification);
     } catch (error) {
         res.status(400).json({ msg: error.message });
+        console.log(error)
     }
 };
 
-// Listar logros
-export const getAchievements = async (req, res) => {
+// Obtener leaderboard
+export const getLeaderboard = async (req, res) => {
     try {
-        const { userId } = req.params;
-        const achievements = await getAchievementsService(userId);
-        res.status(200).json({ achievements });
+        const leaderboard = await getLeaderboardService();
+        res.status(200).json({ leaderboard });
     } catch (error) {
         res.status(400).json({ msg: error.message });
     }
 };
 
-// Desbloquear logro
-export const unlockAchievement = async (req, res) => {
+// Actualizar la gamificación del usuario 
+export const updateGamification = async (req, res) => {
     try {
-        const { userId } = req.params;
-        const { name } = req.body; // Nombre del logro
-        const achievement = await unlockAchievementService(userId, name);
-        res.status(201).json({ msg: "Achievement unlocked", achievement });
+        const { pointsEarned } = req.body;
+        const userId = req.user.id; 
+        const gamification = await updateGamificationPointsAndStreak(userId, pointsEarned);
+
+        res.status(200).json({ msg: "Gamification updated successfully", gamification });
     } catch (error) {
         res.status(400).json({ msg: error.message });
     }

@@ -1,4 +1,4 @@
-import Notification from "../models/Notification.js";
+import {Notification} from "../models/index.js";
 
 // Crear notificación
 export const createNotification = async (data) => {
@@ -7,7 +7,7 @@ export const createNotification = async (data) => {
 
 // Listar notificaciones  de un usuario
 export const findNotificationsByUser = async (userId) => {
-    return await Notification.findAll({ where: { userId, isRead: false } });
+    return await Notification.findAll({ where: { userId, isRead: false },order: [["createdAt", "DESC"]]});
 }
 
 // Buscar notificación por id

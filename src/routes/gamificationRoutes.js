@@ -1,13 +1,13 @@
 import express from "express";
-import { getUserGamification, getAchievements, unlockAchievement } from "../controllers/gamificationController.js";
+import { getUserGamification, getLeaderboard, updateGamification } from "../controllers/gamificationController.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/:userId", authMiddleware, getUserGamification);
+router.get("/user", authMiddleware, getUserGamification);
 
-router.get("/:userId/achievements", authMiddleware, getAchievements);
+router.get("/leaderboard",authMiddleware, getLeaderboard);
 
-router.post("/:userId/achievements", authMiddleware, unlockAchievement);
+router.put("/gamification",authMiddleware, updateGamification);
 
 export default router;

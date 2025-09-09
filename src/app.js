@@ -40,13 +40,13 @@ app.get('/', (req, res) => {
   res.send({ title: 'Backend inicializado' });
 });
 
+app.use("/api/notification", notificationRouter)
 app.use("/api/users", userRoutes);
 app.use("/api/habits", habitRoutes);
 app.use("/api/progress", progressRouter)
-app.use("/api/notification", notificationRouter)
-app.use("api/gamification",gamificationRouter)
+app.use("/api/gamification",gamificationRouter)
 
 app.use((req, res, next) => {
-  res.status(404).json({ msg: "Not Found" });
+  res.status(404).json({ msg: "Not Found or no existe route your search" });
 });
 export default app;

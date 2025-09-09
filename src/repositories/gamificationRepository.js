@@ -1,4 +1,4 @@
-import Gamification from "../models/Gamification.js";
+import {Gamification} from "../models/index.js";
 
 // Crear gamificación
 export const createGamification = async (data) => {
@@ -7,7 +7,7 @@ export const createGamification = async (data) => {
 
 // Buscar gamificación por userId
 export const findGamificationByUserId = async (userId) => {
-    return await Gamification.findOne({ where: { userId } });
+    return await Gamification.findOne({ where: { userId },order: [["createdAt", "DESC"]] },);
 };
 
 // Actualizar gamificación por ID

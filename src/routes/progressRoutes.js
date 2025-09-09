@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createProgress, deleteProgressId, getLeaderboard, getProgressHabitId, getProgressUserId, getUserGamification, updateProgresStatus } from "../controllers/progressContoller.js";
+import { createProgress, deleteProgressId, getProgressHabitId, getProgressUserId, updateProgresStatus } from "../controllers/progressContoller.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const router = Router();
@@ -14,9 +14,6 @@ router.patch("/:idProgress",authMiddleware, updateProgresStatus);
 
 router.delete("/:idProgress",authMiddleware, deleteProgressId);
 
-router.get("/leaderboard", authMiddleware, getLeaderboard);
-
-router.get("/gamification", authMiddleware, getUserGamification);
 
 
 export default router;

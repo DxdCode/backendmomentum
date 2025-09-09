@@ -1,10 +1,12 @@
-import { findGamificationByUserId } from "../repositories/gamificationRepository.js";
-import Achievement from "../models/Achievement.js";
+import { findGamificationByUserId, createGamification, updateGamification, findAllGamifications } from "../repositories/gamificationRepository.js";
+import LEVEL_THRESHOLDS from "./constants/levelThresholds.js";
 
-// Ver estado de gamificación
+
+
 export const getUserGamificationService = async (userId) => {
     const gamification = await findGamificationByUserId(userId);
-    if(!gamification) throw new Error("Gamification not found");
+    if (!gamification) throw new Error("Gamification not found");
+
     return {
         points: gamification.points,
         level: gamification.level,
@@ -13,27 +15,57 @@ export const getUserGamificationService = async (userId) => {
     };
 };
 
-// Listar logros de un usuario
-export const getAchievementsService = async (userId) => {
-    const gamification = await findGamificationByUserId(userId);
-    if(!gamification) throw new Error("Gamification not found");
-
-    const achievements = await Achievement.findAll({ where: { gamificationId: gamification.id } });
-    return achievements.map(a => ({ id: a.id, name: a.name, createdAt: a.createdAt }));
+// Obtener leaderboard
+export const getLeaderboardService = async () => {
+    const allGamifications = await findAllGamifications();
+    return allGamifications
+        .sort((a, b) => b.points - a.points)
+        .map(u => ({
+            userId: u.userId,
+            points: u.points,
+            level: u.level,
+            streak: u.streak,
+            bestStreak: u.bestStreak
+        }));
 };
 
-// Desbloquear nuevo logro
-export const unlockAchievementService = async (userId, achievementName) => {
-    const gamification = await findGamificationByUserId(userId);
-    if(!gamification) throw new Error("Gamification not found");
 
-    const existing = await Achievement.findOne({ where: { gamificationId: gamification.id, name: achievementName } });
-    if(existing) throw new Error("Achievement already unlocked");
+// Actualizar la gamificación puntos, racha y nivel
+export const updateGamificationPointsAndStreak = async (userId, pointsEarned, date) => {
+    let gamification = await findGamificationByUserId(userId);
 
-    const newAchievement = await Achievement.create({
-        gamificationId: gamification.id,
-        name: achievementName
+    if (!gamification) {
+        gamification = await createGamification({ userId, points: 0, level: 1, streak: 0, bestStreak: 0 });
+    }
+
+    gamification.points += pointsEarned;
+    const today = new Date().toISOString().split('T')[0];
+
+    if (date === today && pointsEarned > 0) {
+        gamification.streak += 1;
+        if (gamification.streak > gamification.bestStreak) gamification.bestStreak = gamification.streak;
+    } else if (date === today && pointsEarned === 0) {
+        gamification.streak = 0;
+    }
+
+    let level = 1;
+    for (let i = 0; i < LEVEL_THRESHOLDS.length; i++) {
+        if (gamification.points >= LEVEL_THRESHOLDS[i]) {
+            if (i === LEVEL_THRESHOLDS.length - 1) {
+                throw new Error("The last level");
+            }
+            level = i + 2;
+        }
+    }
+
+    gamification.level = level;
+
+    await updateGamification(gamification.id, {
+        points: gamification.points,
+        level: gamification.level,
+        streak: gamification.streak,
+        bestStreak: gamification.bestStreak
     });
 
-    return { id: newAchievement.id, name: newAchievement.name, createdAt: newAchievement.createdAt };
+    return gamification;
 };
